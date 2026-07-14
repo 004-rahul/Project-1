@@ -54,7 +54,7 @@ Clean, layered dependency flow — dependencies point inward only:
 ## Feature checklist
 
 - [x] Solution scaffold & layered project structure
-- [ ] Product & category domain model
+- [x] Product & category domain model
 - [ ] EF Core + PostgreSQL persistence
 - [ ] Product catalog CRUD API
 - [ ] JWT authentication + refresh-token rotation
