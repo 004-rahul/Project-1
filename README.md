@@ -14,7 +14,7 @@ lightweight MVC storefront and an AI-powered product search on top.
 | Runtime / language | .NET 9, C# 13 |
 | API | ASP.NET Core Web API (controllers) |
 | Frontend | ASP.NET Core MVC (Razor) |
-| Database | PostgreSQL + Entity Framework Core 9 |
+| Database | SQL Server + Entity Framework Core 9 |
 | Caching | Redis (cache-aside, rate limiting, distributed lock) |
 | Messaging | RabbitMQ (events, retry, dead-letter queue) |
 | Auth | JWT access tokens + refresh-token rotation |
@@ -55,7 +55,7 @@ Clean, layered dependency flow — dependencies point inward only:
 
 - [x] Solution scaffold & layered project structure
 - [x] Product & category domain model
-- [ ] EF Core + PostgreSQL persistence
+- [x] EF Core + SQL Server persistence
 - [ ] Product catalog CRUD API
 - [ ] JWT authentication + refresh-token rotation
 - [ ] Shopping cart & orders
@@ -64,16 +64,19 @@ Clean, layered dependency flow — dependencies point inward only:
 - [ ] MVC storefront
 - [ ] Unit tests
 - [ ] AI-powered semantic product search
-- [ ] Docker Compose (API + PostgreSQL + Redis + RabbitMQ)
+- [ ] Docker Compose (API + SQL Server + Redis + RabbitMQ)
 
 ## Getting started
 
-> Prerequisites: [.NET 9 SDK](https://dotnet.microsoft.com/download). PostgreSQL, Redis, and
-> RabbitMQ arrive later via Docker Compose.
+> Prerequisites: [.NET 9 SDK](https://dotnet.microsoft.com/download) and SQL Server — LocalDB
+> (bundled with Visual Studio) works out of the box. Redis and RabbitMQ arrive later via Docker Compose.
 
 ```bash
 # restore & build
 dotnet build
+
+# create the database from the EF Core migrations
+dotnet ef database update --project src/ECommerce.Infrastructure --startup-project src/ECommerce.Api
 
 # run the API
 dotnet run --project src/ECommerce.Api
