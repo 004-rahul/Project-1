@@ -6,7 +6,7 @@ using System.Reflection;
 namespace ECommerce.Infrastructure.Persistence;
 
 /// <summary>
-/// EF Core database context — the single gateway to PostgreSQL. Exposes the entity sets and
+/// EF Core database context — the single gateway to SQL Server. Exposes the entity sets and
 /// applies every <see cref="IEntityTypeConfiguration{TEntity}"/> mapping found in this assembly.
 /// </summary>
 public class ApplicationDbContext : DbContext
