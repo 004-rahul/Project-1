@@ -2,9 +2,11 @@ using ECommerce.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// MVC (Razor views) + API controllers share this single host:
+//   - conventional routes render HTML pages (the storefront UI)
+//   - attribute-routed [ApiController]s under /api return JSON
+builder.Services.AddControllersWithViews();
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -22,9 +24,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
 
 app.UseAuthorization();
 
+// MVC pages (conventional routing) — the UI you see in the browser.
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Attribute-routed API controllers (e.g. /api/products) return JSON.
 app.MapControllers();
 
 app.Run();
