@@ -12,10 +12,10 @@ Running status of the Enterprise E-Commerce build. Updated as features land.
 - Clean layered architecture — Domain → Application → Infrastructure → Api (dependencies point inward only), .NET 9
 
 **Domain & data**
-- Entities: `Product`, `Category`, `BaseEntity` (auto audit timestamps) + `ProductStatus` enum
-- EF Core 9 + SQL Server, Fluent configuration, initial migration (tables, indexes, FK)
+- Entities: `Product`, `Category`, `BaseEntity` (auto audit timestamps) + `ProductStatus` enum (Draft / Active / Inactive)
+- EF Core 9 + SQL Server, Fluent configuration, migrations (catalogue + Identity tables)
 - Repository + Unit-of-Work pattern (`IProductRepository`, `ICategoryRepository`, `IUnitOfWork`)
-- Auto-migrate + seed on startup (2 categories, 6 products) — a fresh clone just runs, no manual DB steps
+- Auto-migrate + seed on startup (roles + a default admin) — a fresh clone just runs; catalogue starts empty
 
 **Application layer**
 - DTOs (`ProductDto`, `CreateProductRequest`) + `ProductService` (use-case logic, entity↔DTO mapping)
@@ -26,12 +26,19 @@ Running status of the Enterprise E-Commerce build. Updated as features land.
 - Admin: manage products — list / create (validated form) / delete
 - Clean navigation: Products · Admin
 
+**Authentication & access (ASP.NET Core Identity)**
+- Email/password login & logout (cookie auth), seeded default admin
+- Roles: Admin / Customer; the whole `/admin` area is locked to the Admin role
+- Role-aware header (Sign in / Logout; Admin link shown only to admins)
+- Admin dashboard with a left-sidebar layout
+
 ---
 
 ## 🚧 Next up
-- Serilog structured logging + global exception handling
-- Authentication + roles (Admin / Customer) with login / logout activity logs
-- Storefront search & filter, product edit
+- Admin: product **Edit** + **Categories** management
+- JWT access + refresh tokens (API auth)
+- Public **Register** + **Google** sign-in (user side)
+- Serilog logging + global exception handling
 
 ---
 
