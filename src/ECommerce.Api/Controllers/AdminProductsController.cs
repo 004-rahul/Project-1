@@ -1,15 +1,16 @@
 using ECommerce.Api.Models;
 using ECommerce.Application.Common.Interfaces;
 using ECommerce.Application.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerce.Api.Controllers;
 
 /// <summary>
-/// Admin catalogue management (list / create / delete). Unsecured for now — role-based access
-/// arrives with authentication, at which point this whole area becomes admin-only.
+/// Admin catalogue management (list / create / delete). Restricted to the Admin role.
 /// </summary>
+[Authorize(Roles = "Admin")]
 [Route("admin/products")]
 public class AdminProductsController : Controller
 {

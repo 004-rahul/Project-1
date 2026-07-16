@@ -1,0 +1,50 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    string Active(string c) => controller == c ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Admin · Enterprise E-Commerce</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0">🛠️ Admin</span>
+            <div class="d-flex align-items-center gap-3">
+                <a class="link-light small text-decoration-none" asp-controller="Home" asp-action="Index">← View store</a>
+                <span class="text-light small d-none d-sm-inline">@User.Identity?.Name</span>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="mb-0">
+                    <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-12 col-md-3 col-lg-2 bg-light border-end p-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link @Active("Admin")" asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link @Active("AdminProducts")" asp-controller="AdminProducts" asp-action="Index">Products</a></li>
+                    <li class="nav-item"><a class="nav-link disabled" href="#">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link disabled" href="#">Orders</a></li>
+                    <li class="nav-item mt-3 mb-1 px-2 text-uppercase text-muted small fw-semibold">System</li>
+                    <li class="nav-item"><a class="nav-link disabled" href="#">Application logs</a></li>
+                    <li class="nav-item"><a class="nav-link disabled" href="#">Notifications</a></li>
+                </ul>
+            </nav>
+            <main class="col py-4 px-md-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
