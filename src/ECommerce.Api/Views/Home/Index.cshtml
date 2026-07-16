@@ -1,43 +1,44 @@
+@using ECommerce.Application.Products
+@model IReadOnlyList<ProductDto>
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Products";
 }
 
-<div class="p-5 mb-4 bg-body-tertiary rounded-3 border">
-    <div class="container-fluid py-3">
-        <h1 class="display-6 fw-bold">Enterprise E-Commerce</h1>
-        <p class="col-lg-9 fs-5 text-muted">
-            A production-style e-commerce backend on ASP.NET Core 9 — clean architecture,
-            SQL Server, JWT auth, Redis, RabbitMQ, SignalR and an AI product search.
-            This page is rendered by the MVC layer; the same host also exposes a REST API.
-        </p>
-    </div>
-</div>
+<h1 class="h3 mb-4">Products</h1>
 
-<div class="row g-4">
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3">Built so far</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">✅ Clean layered architecture</li>
-                    <li class="list-group-item">✅ SQL Server + EF Core persistence</li>
-                    <li class="list-group-item">✅ Repository + unit-of-work</li>
-                    <li class="list-group-item">✅ MVC UI (this page)</li>
-                </ul>
-            </div>
-        </div>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No products yet. Add some from the <a asp-controller="AdminProducts" asp-action="Index">admin area</a>.
     </div>
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title mb-3">Coming next</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">⏳ Product catalog — list &amp; create</li>
-                    <li class="list-group-item">⏳ JWT login / logout + activity log</li>
-                    <li class="list-group-item">⏳ Redis · RabbitMQ · SignalR · Firebase</li>
-                    <li class="list-group-item">⏳ AI semantic product search</li>
-                </ul>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var p in Model)
+        {
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge text-bg-secondary align-self-start mb-2">@p.CategoryName</span>
+                        <h5 class="card-title">@p.Name</h5>
+                        <p class="card-text text-muted small flex-grow-1">@p.Description</p>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="fs-5 fw-semibold">@p.Price.ToString("C")</span>
+                            @if (p.InStock)
+                            {
+                                <span class="badge text-bg-success">In stock</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-danger">Out of stock</span>
+                            }
+                        </div>
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@p.Id"
+                           class="btn btn-outline-primary btn-sm mt-3">View</a>
+                    </div>
+                </div>
             </div>
-        </div>
+        }
     </div>
-</div>
+}

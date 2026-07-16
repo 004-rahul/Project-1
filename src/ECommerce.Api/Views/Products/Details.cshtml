@@ -1,0 +1,42 @@
+@using ECommerce.Application.Products
+@model ProductDto
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Products</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8">
+        <span class="badge text-bg-secondary mb-2">@Model.CategoryName</span>
+        <h1 class="h3">@Model.Name</h1>
+        <p class="text-muted">@Model.Description</p>
+
+        <dl class="row mt-4">
+            <dt class="col-sm-3">Price</dt>
+            <dd class="col-sm-9 fs-5 fw-semibold">@Model.Price.ToString("C")</dd>
+
+            <dt class="col-sm-3">SKU</dt>
+            <dd class="col-sm-9"><code>@Model.Sku</code></dd>
+
+            <dt class="col-sm-3">Availability</dt>
+            <dd class="col-sm-9">
+                @if (Model.InStock)
+                {
+                    <span class="badge text-bg-success">@Model.StockQuantity in stock</span>
+                }
+                else
+                {
+                    <span class="badge text-bg-danger">Out of stock</span>
+                }
+            </dd>
+        </dl>
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-sm">← Back to products</a>
+    </div>
+</div>
