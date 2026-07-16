@@ -25,9 +25,11 @@ public class ProductRepository : IProductRepository
             .FirstOrDefaultAsync(p => p.Sku == sku, cancellationToken);
 
     // AsNoTracking: this is a read-only list, so skip change-tracking overhead.
+    // Include the category so list views can show its name without an extra round-trip.
     public async Task<IReadOnlyList<Product>> ListAsync(int skip, int take, CancellationToken cancellationToken = default) =>
         await _context.Products
             .AsNoTracking()
+            .Include(p => p.Category)
             .OrderBy(p => p.Id)
             .Skip(skip)
             .Take(take)

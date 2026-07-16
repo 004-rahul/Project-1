@@ -1,4 +1,5 @@
 using ECommerce.Application.Common.Interfaces;
+using ECommerce.Application.Products;
 using ECommerce.Infrastructure.Persistence;
 using ECommerce.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,11 @@ public static class DependencyInjection
 
         // Data-access abstractions — scoped so each request shares one DbContext instance.
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        // Application services.
+        services.AddScoped<IProductService, ProductService>();
 
         return services;
     }
