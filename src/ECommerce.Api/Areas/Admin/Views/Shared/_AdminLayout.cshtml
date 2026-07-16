@@ -16,9 +16,9 @@
         <div class="container-fluid">
             <span class="navbar-brand mb-0">🛠️ Admin</span>
             <div class="d-flex align-items-center gap-3">
-                <a class="link-light small text-decoration-none" asp-controller="Home" asp-action="Index">← View store</a>
+                <a class="link-light small text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">← View store</a>
                 <span class="text-light small d-none d-sm-inline">@User.Identity?.Name</span>
-                <form asp-controller="Account" asp-action="Logout" method="post" class="mb-0">
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="mb-0">
                     <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
                 </form>
             </div>
@@ -29,8 +29,8 @@
         <div class="row">
             <nav class="col-12 col-md-3 col-lg-2 bg-light border-end p-3">
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link @Active("Admin")" asp-controller="Admin" asp-action="Index">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link @Active("AdminProducts")" asp-controller="AdminProducts" asp-action="Index">Products</a></li>
+                    <li class="nav-item"><a class="nav-link @Active("Dashboard")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link @Active("Products")" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a></li>
                     <li class="nav-item"><a class="nav-link disabled" href="#">Categories</a></li>
                     <li class="nav-item"><a class="nav-link disabled" href="#">Orders</a></li>
                     <li class="nav-item mt-3 mb-1 px-2 text-uppercase text-muted small fw-semibold">System</li>

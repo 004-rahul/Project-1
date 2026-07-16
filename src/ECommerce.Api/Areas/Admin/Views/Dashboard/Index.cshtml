@@ -1,8 +1,6 @@
-@using ECommerce.Api.Models
 @model AdminDashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
-    Layout = "_AdminLayout";
 }
 
 <h1 class="h3 mb-4">Dashboard</h1>
@@ -13,7 +11,7 @@
             <div class="card-body position-relative">
                 <div class="text-muted small">Products</div>
                 <div class="display-6">@Model.ProductCount</div>
-                <a asp-controller="AdminProducts" asp-action="Index" class="stretched-link"></a>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="stretched-link"></a>
             </div>
         </div>
     </div>

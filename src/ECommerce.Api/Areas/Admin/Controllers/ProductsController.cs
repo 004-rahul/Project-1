@@ -5,19 +5,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ECommerce.Api.Controllers;
+namespace ECommerce.Api.Areas.Admin.Controllers;
 
-/// <summary>
-/// Admin catalogue management (list / create / delete). Restricted to the Admin role.
-/// </summary>
+/// <summary>Admin product management (list / create / delete). Restricted to the Admin role.</summary>
+[Area("Admin")]
 [Authorize(Roles = "Admin")]
 [Route("admin/products")]
-public class AdminProductsController : Controller
+public class ProductsController : Controller
 {
     private readonly IProductService _products;
     private readonly ICategoryRepository _categories;
 
-    public AdminProductsController(IProductService products, ICategoryRepository categories)
+    public ProductsController(IProductService products, ICategoryRepository categories)
     {
         _products = products;
         _categories = categories;
@@ -43,7 +42,6 @@ public class AdminProductsController : Controller
     {
         if (!ModelState.IsValid)
         {
-            // Re-populate the dropdown before redisplaying the form with validation errors.
             form.CategoryOptions = await BuildCategoryOptionsAsync(cancellationToken);
             return View(form);
         }

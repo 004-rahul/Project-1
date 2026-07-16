@@ -9,7 +9,7 @@
 @if (!Model.Any())
 {
     <div class="alert alert-info">
-        No products yet. Add some from the <a asp-controller="AdminProducts" asp-action="Index">admin area</a>.
+        No products yet. Add some from the <a asp-area="Admin" asp-controller="Products" asp-action="Index">admin area</a>.
     </div>
 }
 else
@@ -34,7 +34,7 @@ else
                                 <span class="badge text-bg-danger">Out of stock</span>
                             }
                         </div>
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@p.Id"
+                        <a asp-area="" asp-controller="Products" asp-action="Details" asp-route-id="@p.Id"
                            class="btn btn-outline-primary btn-sm mt-3">View</a>
                     </div>
                 </div>

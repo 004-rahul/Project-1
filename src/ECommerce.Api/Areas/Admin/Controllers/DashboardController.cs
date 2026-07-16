@@ -3,16 +3,17 @@ using ECommerce.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Api.Controllers;
+namespace ECommerce.Api.Areas.Admin.Controllers;
 
-/// <summary>Admin dashboard landing page. The entire admin area is restricted to the Admin role.</summary>
+/// <summary>Admin dashboard landing page. The entire Admin area is restricted to the Admin role.</summary>
+[Area("Admin")]
 [Authorize(Roles = "Admin")]
 [Route("admin")]
-public class AdminController : Controller
+public class DashboardController : Controller
 {
     private readonly IProductService _products;
 
-    public AdminController(IProductService products) => _products = products;
+    public DashboardController(IProductService products) => _products = products;
 
     [HttpGet("")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
