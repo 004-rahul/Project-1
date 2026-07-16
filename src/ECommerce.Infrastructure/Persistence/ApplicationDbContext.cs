@@ -1,15 +1,17 @@
 using ECommerce.Domain.Common;
 using ECommerce.Domain.Entities;
+using ECommerce.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace ECommerce.Infrastructure.Persistence;
 
 /// <summary>
-/// EF Core database context — the single gateway to SQL Server. Exposes the entity sets and
-/// applies every <see cref="IEntityTypeConfiguration{TEntity}"/> mapping found in this assembly.
+/// EF Core database context — the single gateway to SQL Server. Extends <see cref="IdentityDbContext{TUser}"/>
+/// so ASP.NET Core Identity's user and role tables live alongside the catalogue tables.
 /// </summary>
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -21,9 +23,11 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Auto-discovers ProductConfiguration, CategoryConfiguration, etc. — no manual registration.
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        // Base call first so Identity's own entity mappings are applied.
         base.OnModelCreating(modelBuilder);
+
+        // Then our configurations (ProductConfiguration, CategoryConfiguration, etc.).
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
     /// <summary>

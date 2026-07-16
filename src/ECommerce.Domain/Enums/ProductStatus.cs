@@ -1,8 +1,9 @@
 namespace ECommerce.Domain.Enums;
 
 /// <summary>
-/// Lifecycle state of a product in the catalogue. Stored as an integer so the values
-/// are stable even if the names change; do not renumber existing members.
+/// Lifecycle state of a product in the catalogue. Stored as an integer so the values are stable even
+/// if the names change; do not renumber existing members. Whether a product is "out of stock" is
+/// derived from its stock quantity, so it is intentionally NOT a status here.
 /// </summary>
 public enum ProductStatus
 {
@@ -12,9 +13,6 @@ public enum ProductStatus
     /// <summary>Published and available for purchase.</summary>
     Active = 1,
 
-    /// <summary>Published but temporarily unavailable (no stock).</summary>
-    OutOfStock = 2,
-
-    /// <summary>Permanently removed from sale; kept for order history.</summary>
-    Discontinued = 3
+    /// <summary>Was published, now hidden from the storefront (paused or retired) — not deleted.</summary>
+    Inactive = 2
 }
