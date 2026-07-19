@@ -2,7 +2,7 @@
 
 Running status of the Enterprise E-Commerce build. Updated as features land.
 
-**Last updated:** 2026-07-16
+**Last updated:** 2026-07-19
 
 ---
 
@@ -27,18 +27,24 @@ Running status of the Enterprise E-Commerce build. Updated as features land.
 - Clean navigation: Products · Admin
 
 **Authentication & access (ASP.NET Core Identity)**
+- Customer self-registration (web) — profile capture (name, phone), auto-login, Customer role
 - Email/password login & logout (cookie auth), seeded default admin
 - Roles: Admin / Customer; the whole `/admin` area is locked to the Admin role
-- Role-aware header (Sign in / Logout; Admin link shown only to admins)
+- Role-aware header (Sign in / Register / Logout; Admin link shown only to admins)
 - Admin dashboard with a left-sidebar layout
+
+**REST API (one backend, two front doors — web now, mobile later)**
+- Versioned JSON API under `/api/v1`, OpenAPI document + Scalar interactive tester, RFC 7807 ProblemDetails errors
+- `/api/v1/products` — list + get-by-id (shares the same `IProductService` the web app uses)
+- `/api/v1/auth` — register / login / refresh / logout / me
+- JWT access tokens + rotating, revocable **refresh tokens** (server-side store; rotation revokes the prior token, logout revokes on demand)
 
 ---
 
 ## 🚧 Next up
+- Serilog structured logging + global exception handling + login/logout activity logs
 - Admin: product **Edit** + **Categories** management
-- JWT access + refresh tokens (API auth)
-- Public **Register** + **Google** sign-in (user side)
-- Serilog logging + global exception handling
+- **Google** sign-in (user side)
 
 ---
 
