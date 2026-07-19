@@ -1,13 +1,14 @@
 using ECommerce.Api.Models;
 using ECommerce.Infrastructure.Identity;
+using ECommerce.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
 /// <summary>
-/// Cookie-based sign-in for the browser (MVC pages). Public self-registration and Google sign-in
-/// arrive in the user-side phase; for now this covers login and logout.
+/// Cookie-based auth for the browser (MVC pages): customer self-registration, login, and logout.
+/// Google sign-in arrives in the user-side phase. API clients use the JWT endpoints under /api/v1/auth.
 /// </summary>
 [Route("account")]
 public class AccountController : Controller
@@ -19,6 +20,38 @@ public class AccountController : Controller
     {
         _signInManager = signInManager;
         _userManager = userManager;
+    }
+
+    [HttpGet("register")]
+    public IActionResult Register(string? returnUrl = null) => View(new RegisterViewModel { ReturnUrl = returnUrl });
+
+    [HttpPost("register")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = new ApplicationUser
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            FullName = model.FullName,
+            PhoneNumber = model.Phone
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View(model);
+        }
+
+        // Every self-registered account is a customer; admins are provisioned separately.
+        await _userManager.AddToRoleAsync(user, DbInitializer.CustomerRole);
+        await _signInManager.SignInAsync(user, isPersistent: false);
+        return LocalRedirect(model.ReturnUrl ?? Url.Action("Index", "Home")!);
     }
 
     [HttpGet("login")]
