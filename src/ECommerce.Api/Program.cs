@@ -1,7 +1,10 @@
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Identity;
 using ECommerce.Infrastructure.Persistence;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,9 @@ builder.Services.AddControllersWithViews();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Return consistent RFC 7807 ProblemDetails for API error responses.
+builder.Services.AddProblemDetails();
 
 // Infrastructure services (SQL Server via EF Core).
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -35,6 +41,26 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/account/logout";
     options.AccessDeniedPath = "/account/denied";
 });
+
+// JWT bearer for the REST API — sits alongside the Identity cookie used by the MVC pages.
+// (Cookie stays the default scheme for the browser; API endpoints opt into "Bearer".)
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
+var jwt = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwt.Issuer,
+            ValidAudience = jwt.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
+            ClockSkew = TimeSpan.FromSeconds(30)
+        };
+    });
 
 var app = builder.Build();
 
@@ -61,6 +87,8 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    // Interactive API reference / tester at /scalar (reads the OpenAPI document).
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
