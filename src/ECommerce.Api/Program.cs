@@ -46,7 +46,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 // (Cookie stays the default scheme for the browser; API endpoints opt into "Bearer".)
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 var jwt = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;
-builder.Services.AddAuthentication()
+var authBuilder = builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -61,6 +61,21 @@ builder.Services.AddAuthentication()
             ClockSkew = TimeSpan.FromSeconds(30)
         };
     });
+
+// "Sign in with Google" — registered only when credentials are configured (env / user-secrets),
+// so the app runs cleanly with none set and the button simply doesn't appear. We don't store
+// Google's tokens; the callback just creates/links a local account (see AccountController).
+var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(googleClientSecret))
+{
+    authBuilder.AddGoogle(options =>
+    {
+        options.ClientId = googleClientId;
+        options.ClientSecret = googleClientSecret;
+        options.SignInScheme = IdentityConstants.ExternalScheme;
+    });
+}
 
 var app = builder.Build();
 

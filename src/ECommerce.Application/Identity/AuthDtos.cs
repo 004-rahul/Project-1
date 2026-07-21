@@ -5,8 +5,11 @@ namespace ECommerce.Application.Identity;
 /// <summary>Sign-up payload for the REST API. Captures the user's profile, not just credentials.</summary>
 public class RegisterRequest
 {
-    [Required, StringLength(150)]
-    public string FullName { get; set; } = string.Empty;
+    [Required, StringLength(100)]
+    public string FirstName { get; set; } = string.Empty;
+
+    [Required, StringLength(100)]
+    public string LastName { get; set; } = string.Empty;
 
     [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;

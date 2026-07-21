@@ -39,7 +39,8 @@ public class IdentityService : IIdentityService
         {
             UserName = request.Email,
             Email = request.Email,
-            FullName = request.FullName,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             PhoneNumber = request.Phone
         };
 
