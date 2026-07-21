@@ -89,24 +89,21 @@ dotnet run --project src/ECommerce.Api
 
 ## 4. Current State (update this as work progresses)
 
-**Committed & pushed:** clean layered skeleton; Domain/Application/Infrastructure/Api; EF Core +
-Identity; storefront product grid + product details; admin Area (dashboard, products list/create);
-cookie login/logout with role-based nav; seed = roles + admin (no dummy products).
+**Committed & pushed (all live-verified):** clean layered skeleton; Domain/Application/Infrastructure/Api;
+EF Core + Identity; storefront product grid + details (**public** — browse without login); admin Area
+(dashboard, products list/create); cookie login/logout with role-based nav; seed = roles + admin (no
+dummy products). **REST API v1** (`/api/v1/products`, Scalar, ProblemDetails). **JWT + refresh tokens**
+(`/api/v1/auth` register/login/refresh/logout/me; rotation + revocation). **Customer web registration**
+with full profile (first/last name, phone, address) + auto-login. **Google sign-in scaffold** (button
+shows only when OAuth keys are set; callback creates/links a local account; we don't store Google tokens).
 
-**HELD (built, compiles clean, NOT yet committed — to be committed by the owner):**
-- **Step 2 — REST API:** `/api/v1/products` (GET all + GET by id), Scalar tester, ProblemDetails.
-- **Step 3 — JWT + refresh tokens:** `/api/v1/auth` (register/login/refresh/logout/me),
-  access token + rotating refresh token, `RefreshTokens` table + migration, `EnableRetryOnFailure`.
-  ✅ Builds clean AND **live-verified end to end on 2026-07-19** via curl: register→tokens,
-  /me (200 with token, 401 without), login (200; wrong password 401), refresh rotates + revokes
-  the old token (401 on reuse), logout revokes (204 then 401), duplicate email 400. Working.
+**Nothing currently held** — working tree is clean.
 
 **Next planned steps:**
-- Step 4 — Web registration page (MVC) capturing full profile (name, phone), reusing the Identity service.
-- Step 5 — Serilog structured logging + global exception handling.
-- Later — Google login (needs the owner's own Google OAuth keys, added via user-secrets),
-  product Edit + Categories management, cart (Redis), orders, RabbitMQ, SignalR, Firebase FCM,
-  AI semantic search, Docker Compose, tests.
+- Serilog structured logging + global exception handling + login/logout activity logs.
+- Admin: product Edit + Categories management.
+- Add real Google OAuth keys via user-secrets to activate the Google button (`Authentication:Google:ClientId`/`ClientSecret`); redirect URI `/signin-google`.
+- Later — cart (Redis), orders, RabbitMQ, SignalR, Firebase FCM, AI semantic search, Docker Compose, tests.
 
 > `PROGRESS.md` holds the running status log. Keep it and this file's §4 in sync.
 

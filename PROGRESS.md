@@ -2,7 +2,7 @@
 
 Running status of the Enterprise E-Commerce build. Updated as features land.
 
-**Last updated:** 2026-07-19
+**Last updated:** 2026-07-21
 
 ---
 
@@ -27,11 +27,13 @@ Running status of the Enterprise E-Commerce build. Updated as features land.
 - Clean navigation: Products · Admin
 
 **Authentication & access (ASP.NET Core Identity)**
-- Customer self-registration (web) — profile capture (name, phone), auto-login, Customer role
+- Customer self-registration (web) — full profile: first/last name, phone, and address (line, city, state, postal code, country); auto-login, Customer role
+- **Google sign-in scaffolded** — button appears only when OAuth keys are configured; the callback creates/links a local account entry (we don't store Google's tokens)
 - Email/password login & logout (cookie auth), seeded default admin
 - Roles: Admin / Customer; the whole `/admin` area is locked to the Admin role
 - Role-aware header (Sign in / Register / Logout; Admin link shown only to admins)
 - Admin dashboard with a left-sidebar layout
+- Storefront is intentionally public (browse without login); auth is for buying/admin
 
 **REST API (one backend, two front doors — web now, mobile later)**
 - Versioned JSON API under `/api/v1`, OpenAPI document + Scalar interactive tester, RFC 7807 ProblemDetails errors
@@ -44,7 +46,7 @@ Running status of the Enterprise E-Commerce build. Updated as features land.
 ## 🚧 Next up
 - Serilog structured logging + global exception handling + login/logout activity logs
 - Admin: product **Edit** + **Categories** management
-- **Google** sign-in (user side)
+- Add real Google OAuth keys (user-secrets) to activate the Google button
 
 ---
 
